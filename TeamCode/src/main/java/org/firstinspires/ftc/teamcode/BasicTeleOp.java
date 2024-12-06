@@ -118,8 +118,8 @@ public class BasicTeleOp extends LinearOpMode {
         public final DcMotor RF, RB, LF, LB;
 
 
-        public final DcMotor Climb, ArmUpper, Arm0, Arm1;
-
+        //public final DcMotor Climb, ArmUpper, Arm0, Arm1;
+        public final DcMotor ArmUpper, Arm0, Arm1;
 
         public final Servo Grab;
 
@@ -170,7 +170,7 @@ public class BasicTeleOp extends LinearOpMode {
             RB = hardwareMap.get(DcMotor.class, "RB");
             LF = hardwareMap.get(DcMotor.class, "LF");
             LB = hardwareMap.get(DcMotor.class, "LB");
-            Climb = hardwareMap.get(DcMotor.class, "Climb");
+            //Climb = hardwareMap.get(DcMotor.class, "Climb");
             ArmUpper = hardwareMap.get(DcMotor.class, "Armupper");
             Arm0 = hardwareMap.get(DcMotor.class, "Arm0");
             Arm1 = hardwareMap.get(DcMotor.class, "Arm1");
@@ -184,7 +184,7 @@ public class BasicTeleOp extends LinearOpMode {
             RB.setDirection(DcMotor.Direction.FORWARD);
             LF.setDirection(DcMotor.Direction.REVERSE);
             LB.setDirection(DcMotor.Direction.REVERSE);
-            Climb.setDirection(DcMotor.Direction.REVERSE);
+            //Climb.setDirection(DcMotor.Direction.REVERSE);
             ArmUpper.setDirection(DcMotor.Direction.FORWARD);
             Arm0.setDirection(DcMotorSimple.Direction.REVERSE);
             Arm1.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -199,7 +199,7 @@ public class BasicTeleOp extends LinearOpMode {
             RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             ArmUpper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             Arm0.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            Climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //Climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             Arm1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -210,7 +210,7 @@ public class BasicTeleOp extends LinearOpMode {
             Arm0.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             Arm1.setTargetPosition(Arm1.getCurrentPosition());
             Arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            Climb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //Climb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             ArmUpper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
