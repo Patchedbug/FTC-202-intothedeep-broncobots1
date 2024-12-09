@@ -2,11 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 
 
+import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.zyxOrientation;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.ftc.FlightRecorder;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
+import com.acmerobotics.roadrunner.ftc.LazyImu;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -23,6 +27,10 @@ import org.firstinspires.ftc.teamcode.messages.PoseMessage;
 public class PinpointDrive extends MecanumDrive {
     public static class Params {
         /*
+        Set this to the name that your Pinpoint is configured as in your hardware config.
+         */
+        public String pinpointDeviceName = "pinpoint";
+        /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
         The X pod offset refers to how far sideways from the tracking point the
         X (forward) odometry pod is. Left of the center is a positive number,
@@ -32,8 +40,8 @@ public class PinpointDrive extends MecanumDrive {
          */
         //These are tuned for 3110-0002-0001 Product Insight #1
         // RR localizer note: These units are inches, presets are converted from mm (which is why they are inexact)
-        public double xOffset = 5.3775;
-        public double yOffset = 0;
+        public double xOffset = -2;
+        public double yOffset = -1;
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -45,7 +53,7 @@ public class PinpointDrive extends MecanumDrive {
         To get this value from inPerTick, first convert the value to millimeters (multiply by 25.4)
         and then take its inverse (one over the value)
          */
-        public double encoderResolution = GoBildaPinpointDriverRR.goBILDA_SWINGARM_POD;
+        public double encoderResolution = GoBildaPinpointDriverRR.goBILDA_4_BAR_POD;
 
         /*
         Set the direction that each of the two odometry pods count. The X (forward) pod should
@@ -54,16 +62,28 @@ public class PinpointDrive extends MecanumDrive {
          */
         public GoBildaPinpointDriver.EncoderDirection xDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
         public GoBildaPinpointDriver.EncoderDirection yDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+
+        /*
+        Use the pinpoint IMU for tuning
+        If true, overrides any IMU setting in MecanumDrive and uses exclusively Pinpoint for tuning
+        You can also use the pinpoint directly in MecanumDrive if this doesn't work for some reason;
+         replace "imu" with "pinpoint" or whatever your pinpoint is called in config.
+         Note: Pinpoint IMU is always used for base localization
+         */
+        public boolean usePinpointIMUForTuning = true;
     }
 
     public static Params PARAMS = new Params();
     public GoBildaPinpointDriverRR pinpoint;
     private Pose2d lastPinpointPose = pose;
-
     public PinpointDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
         FlightRecorder.write("PINPOINT_PARAMS",PARAMS);
-        pinpoint = hardwareMap.get(GoBildaPinpointDriverRR.class,"Pinpoint");
+        pinpoint = hardwareMap.get(GoBildaPinpointDriverRR.class,PARAMS.pinpointDeviceName);
+
+        if (PARAMS.usePinpointIMUForTuning) {
+            lazyImu = new LazyImu(hardwareMap, PARAMS.pinpointDeviceName, new RevHubOrientationOnRobot(zyxOrientation(0, 0, 0)));
+        }
 
         // RR localizer note: don't love this conversion (change driver?)
         pinpoint.setOffsets(DistanceUnit.MM.fromInches(PARAMS.xOffset), DistanceUnit.MM.fromInches(PARAMS.yOffset));
@@ -81,7 +101,7 @@ public class PinpointDrive extends MecanumDrive {
         This is recommended before you run your autonomous, as a bad initial calibration can cause
         an incorrect starting value for x, y, and heading.
          */
-        //pinpoint.recalibrateIMU();
+        pinpoint.recalibrateIMU();
         pinpoint.resetPosAndIMU();
         // wait for pinpoint to finish calibrating
         try {
