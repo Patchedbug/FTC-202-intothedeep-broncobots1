@@ -153,17 +153,6 @@ public class BasicTeleOp extends LinearOpMode {
             this.telemetry = telemetry;
             this.map = hardwareMap;
 
-            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-            parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-            parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-            parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-            parameters.loggingEnabled = true;
-            parameters.loggingTag = "IMU";
-            parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
-            imu.initialize(parameters);
 
             // "deviceName:" is what appears in the configure section on control hub
             RF = hardwareMap.get(DcMotor.class, "RF");
