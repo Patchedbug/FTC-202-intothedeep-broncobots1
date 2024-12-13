@@ -112,7 +112,7 @@ public class BasicTeleOp extends LinearOpMode {
         static final double EncoderTickToTile = 1 / ((23.4 * 25.4 * 4096) / 109.955742876);
 
 
-        public final BNO055IMU imu;
+
 
 
         public final DcMotor RF, RB, LF, LB;
@@ -200,7 +200,8 @@ public class BasicTeleOp extends LinearOpMode {
             Arm1.setTargetPosition(Arm1.getCurrentPosition());
             Arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //Climb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            ArmUpper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            ArmUpper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ArmUpper.setTargetPosition(ArmUpper.getCurrentPosition());
 
             LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

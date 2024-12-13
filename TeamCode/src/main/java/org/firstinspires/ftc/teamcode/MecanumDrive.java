@@ -52,7 +52,7 @@ public class MecanumDrive {
 
         // drive model parameters
         public double inPerTick = 1; // If you're using OTOS/Pinpoint leave this at 1 (all values will be in inches, 1 tick = 1 inch)
-        public double lateralInPerTick = inPerTick; // Tune this with LateralRampLogger (even if you use OTOS/Pinpoint)
+        public double lateralInPerTick = 0.6792893634884984; // Tune this with LateralRampLogger (even if you use OTOS/Pinpoint)
         public double trackWidthTicks = 1.2373908988129032;
 
         // feedforward parameters (in tick units)
@@ -60,7 +60,7 @@ public class MecanumDrive {
         //solved
         public double kV = 0.21800066714646651;
         //solved
-        public double kA = 0.0000001;
+        public double kA = 0;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -119,6 +119,7 @@ public class MecanumDrive {
         }
 
         // TODO: make sure your config has motors with these names (or change them)
+
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         leftFront = hardwareMap.get(DcMotorEx.class, "LF");
         leftBack = hardwareMap.get(DcMotorEx.class, "LB");

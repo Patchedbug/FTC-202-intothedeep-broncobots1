@@ -79,7 +79,7 @@ public class PinpointDrive extends MecanumDrive {
     public PinpointDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
         FlightRecorder.write("PINPOINT_PARAMS",PARAMS);
-        pinpoint = hardwareMap.get(GoBildaPinpointDriverRR.class, PARAMS.pinpointDeviceName);
+        pinpoint = (GoBildaPinpointDriverRR) hardwareMap.get(GoBildaPinpointDriver.class, PARAMS.pinpointDeviceName);
 
         if (PARAMS.usePinpointIMUForTuning) {
             lazyImu = new LazyImu(hardwareMap, PARAMS.pinpointDeviceName, new RevHubOrientationOnRobot(zyxOrientation(0, 0, 0)));
